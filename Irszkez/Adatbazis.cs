@@ -60,7 +60,7 @@ namespace Irszkez
             foreach (Irszam item in IrSzamok)
             {
 
-                if (item.Megye == keresendo)
+                if (item.Megye.IndexOf(keresendo) != -1)
                 {
                     temp.Add(item);
                 }
@@ -75,7 +75,7 @@ namespace Irszkez
             foreach (Irszam item in IrSzamok)
             {
 
-                if (item.Varos.IndexOf(keresendo)!=-1)
+                if (item.Varos.IndexOf(keresendo) != -1)
                 {
                     temp.Add(item);
                 }

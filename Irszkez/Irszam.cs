@@ -13,12 +13,14 @@ namespace Irszkez
         public string Varos { get; set; }
 
         public string Megye { get; set; }
+
         public Irszam(int irsz, string varos, string megye)
         {
             Irsz = irsz;
             Varos = varos;
             Megye = megye;
         }
+
         public override string ToString()
         {
             string eredmeny = "";

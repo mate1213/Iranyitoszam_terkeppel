@@ -50,14 +50,17 @@ namespace Irszkez
             }
         }
 
+        private List<Irszam> eredm = new List<Irszam>();
+
+        internal List<Irszam> Eredm { get => eredm; set => eredm = value; }
+
         private void btKereses_Click(object sender, EventArgs e)
         {
-            List<Irszam> eredm = new List<Irszam>();
             if (rbIrszam.Checked)
             {
                 try
                 {
-                    eredm = ab.KeresIrsz(int.Parse(tbKeres.Text));
+                    Eredm = ab.KeresIrsz(int.Parse(tbKeres.Text));
                 }
                 catch (FormatException)
                 {
@@ -66,34 +69,40 @@ namespace Irszkez
             }
             if (rbMegye.Checked)
             {
-                eredm = ab.KeresMegye(tbKeres.Text);
+                Eredm = ab.KeresMegye(tbKeres.Text);
             }
             if (rbVaros.Checked)
             {
-                eredm = ab.KeresVaros(tbKeres.Text);
+                Eredm = ab.KeresVaros(tbKeres.Text);
             }
             lbEredmeny.Items.Clear();
-            foreach (Irszam item in eredm)
+            foreach (Irszam item in Eredm)
             {
                 lbEredmeny.Items.Add(item);
             }
-            label1.Text = eredm.Count().ToString();
-            if (eredm.Count() == 0)
+            label1.Text = Eredm.Count().ToString();
+            if (Eredm.Count() == 0)
             {
                 MessageBox.Show("Nincs találat!");
             }
 
         }
 
-        private void lbEredmeny_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void Btn_OpenMap_Click(object sender, EventArgs e)
         {
-            Terkep t = new Terkep();
-            t.Show();
+            TerkepForm tF = new TerkepForm();
+            tF.Show();
+            string temp = null;
+            string tempVaros = null;
+            foreach (Irszam item in Eredm)
+            {
+                temp = item.Irsz + ", Hungary";
+                tempVaros = item.Varos;
+                tF.Terkep_Megnyitasa(temp, tempVaros);
+                temp = null;
+                tempVaros = null;
+            }
+            MessageBox.Show("Térkép betöltve! :D", "Értesítés", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
     }
 }

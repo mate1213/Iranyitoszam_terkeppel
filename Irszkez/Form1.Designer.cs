@@ -144,7 +144,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(817, 410);
+            this.ClientSize = new System.Drawing.Size(449, 410);
             this.Controls.Add(this.Btn_OpenMap);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbKeres);
