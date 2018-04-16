@@ -14,6 +14,11 @@ namespace Irszkez
 
         public string Megye { get; set; }
 
+        public Irszam()
+        {
+
+        }
+
         public Irszam(int irsz, string varos, string megye)
         {
             Irsz = irsz;

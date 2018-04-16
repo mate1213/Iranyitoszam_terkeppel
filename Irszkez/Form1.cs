@@ -13,6 +13,7 @@ using Gmap.net;
 using Gmap;
 using GMap;
 using GMap.NET.WindowsForms;
+using System.Diagnostics;
 
 namespace Irszkez
 {
@@ -20,10 +21,15 @@ namespace Irszkez
     {
         Adatbazis ab = new Adatbazis();
 
+        private List<Irszam> eredm = new List<Irszam>();
+
+        internal List<Irszam> Eredm { get => eredm; set => eredm = value; }
+
         public Form1()
         {
             InitializeComponent();
-            
+            Eredm = null;
+
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
@@ -49,10 +55,6 @@ namespace Irszkez
                 }
             }
         }
-
-        private List<Irszam> eredm = new List<Irszam>();
-
-        internal List<Irszam> Eredm { get => eredm; set => eredm = value; }
 
         private void btKereses_Click(object sender, EventArgs e)
         {
@@ -92,6 +94,46 @@ namespace Irszkez
         {
             TerkepForm tF = new TerkepForm();
             tF.Show();
+
+            if (Eredm == null)
+            {
+                MessageBox.Show("Térkép nincs betöltve! :D\nNem végeztél keresést!", "Próbáld újra!",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                tF.Close();
+            }
+            else if (Eredm.Count == 0)
+            {
+                tF.Terkep_Megnyitasa("Hungary", "Magyarország");
+                DialogResult result = MessageBox.Show(
+                                            "Térkép betöltve!\nÖsszesen " +
+                                            Eredm.Count.ToString() +
+                                            " város lett megjelölve! :(\n\nPróbáld újra! " +
+                                            "(Retry)\nVagy térj vissza a térképhez! (Cancel)",
+                                            "Próbáld újra!",
+                                            MessageBoxButtons.RetryCancel,
+                                            MessageBoxIcon.Warning,
+                                            MessageBoxDefaultButton.Button2
+                                            );
+                if (result == DialogResult.Retry)
+                {
+                    tF.Close();
+                }
+            }
+
+            else
+            {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                tF.Iranyitoszamokdb = Eredm.Count;
+                Rajzol(tF);
+                sw.Stop();
+                RajzolUzenet(sw);
+            }
+        }
+
+        public void Rajzol(TerkepForm tF)
+        {
+            //TerkepForm tF = new TerkepForm();
             string temp = null;
             string tempVaros = null;
             foreach (Irszam item in Eredm)
@@ -102,7 +144,25 @@ namespace Irszkez
                 temp = null;
                 tempVaros = null;
             }
-            MessageBox.Show("Térkép betöltve! :D", "Értesítés", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            
+        }
+
+        public void RajzolUzenet (Stopwatch sw)
+        {
+            TimeSpan ts = sw.Elapsed;
+            MessageBox.Show(
+                "Térkép betöltve! :D\nÖsszesen " +
+                Eredm.Count.ToString() +
+                " város lett megjelölve!" +
+                "\n\nIdőtartam: " + 
+                String.Format("{0}:{1}",
+                    Math.Floor(ts.TotalMinutes),
+                    ts.ToString("ss\\.ff")),
+                "Értesítés",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information,
+                MessageBoxDefaultButton.Button1
+                );
         }
     }
 }

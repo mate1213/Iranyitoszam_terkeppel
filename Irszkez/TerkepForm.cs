@@ -20,8 +20,12 @@ namespace Irszkez
         {
             InitializeComponent();
         }
+
+        public int Iranyitoszamokdb { get; set; }
+
         /// <summary>
-        /// Iranyitoszamok megjelolese a terkepen, markerekkel. Place formatuma: "Irszam, Orszag". City formatuma: "Varos neve".
+        /// Iranyitoszamok megjelolese a terkepen, markerekkel. 
+        /// Place formatuma: "Irszam, Orszag". City formatuma: "Varos neve".
         /// </summary>
         /// <param name="place"></param>
         /// <param name="city"></param>
@@ -31,15 +35,16 @@ namespace Irszkez
             gmap.MapProvider = OpenStreetMapProvider.Instance;
             GMaps.Instance.Mode = AccessMode.ServerOnly;
             gmap.ShowCenter = false;
-            gmap.SetPositionByKeywords(place);
-            temp = gmap.Position;
+            gmap.AutoScroll = false;
+            //gmap.SetPositionByKeywords(place);
+            gmap.GetPositionByKeywords(place, out temp); 
 
             GMapOverlay markers = new GMapOverlay("markers");
             GMapMarker marker =
                 new GMarkerGoogle(
                     new PointLatLng(temp.Lat, temp.Lng),
                     GMarkerGoogleType.blue_pushpin);
-            marker.ToolTipText = city;
+            marker.ToolTipText = city + "\n" + place.Substring(0,4);
             marker.ToolTip.Fill = Brushes.Black;
             marker.ToolTip.Foreground = Brushes.White;
             marker.ToolTip.Stroke = Pens.Black;
@@ -48,7 +53,5 @@ namespace Irszkez
             gmap.Overlays.Add(markers);
             gmap.SetPositionByKeywords("Hungary");
         }
-
-
     }
 }

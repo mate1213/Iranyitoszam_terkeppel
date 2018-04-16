@@ -1,4 +1,8 @@
-﻿namespace Irszkez
+﻿using System;
+using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Irszkez
 {
     partial class TerkepForm
     {
@@ -29,6 +33,10 @@
         private void InitializeComponent()
         {
             this.gmap = new GMap.NET.WindowsForms.GMapControl();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.Lb_Precent = new System.Windows.Forms.Label();
+            this.Btn_Cancel = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // gmap
@@ -58,7 +66,7 @@
             this.gmap.Size = new System.Drawing.Size(742, 589);
             this.gmap.TabIndex = 0;
             this.gmap.Zoom = 7D;
-            // 
+            //// 
             // TerkepForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -76,5 +84,9 @@
         #endregion
 
         private GMap.NET.WindowsForms.GMapControl gmap;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label Lb_Precent;
+        private System.Windows.Forms.Button Btn_Cancel;
+        private BackgroundWorker backgroundWorker1;
     }
 }

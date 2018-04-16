@@ -1,4 +1,6 @@
-﻿namespace Irszkez
+﻿using System;
+
+namespace Irszkez
 {
     partial class Form1
     {
@@ -159,6 +161,11 @@
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void lbEredmeny_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
