@@ -48,6 +48,29 @@ namespace Irszkez
             gmap.SetPositionByKeywords("Hungary");
         }
 
+        public void Terkep_MegnyitasaIranyitoszam(string place, string city)
+        {
+            PointLatLng temp = new PointLatLng();
+            gmap.MapProvider = OpenStreetMapProvider.Instance;
+            GMaps.Instance.Mode = AccessMode.ServerOnly;
+            gmap.ShowCenter = false;
+            gmap.GetPositionByKeywords(place, out temp);
+
+            GMapOverlay markers = new GMapOverlay("markers");
+            GMapMarker marker =
+                new GMarkerGoogle(
+                    new PointLatLng(temp.Lat, temp.Lng),
+                    GMarkerGoogleType.blue_pushpin);
+            marker.ToolTipText = city + "\n" + place.Substring(0,4);
+            marker.ToolTip.Fill = Brushes.Black;
+            marker.ToolTip.Foreground = Brushes.White;
+            marker.ToolTip.Stroke = Pens.Black;
+            marker.ToolTip.TextPadding = new Size(20, 10);
+            markers.Markers.Add(marker);
+            gmap.Overlays.Add(markers);
+            gmap.SetPositionByKeywords("Hungary");
+        }
+
         internal void Terkep_Beallitas()
         {
             gmap.SetPositionByKeywords("Hungary");

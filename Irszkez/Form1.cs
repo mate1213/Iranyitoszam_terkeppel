@@ -104,6 +104,7 @@ namespace Irszkez
                 MessageBox.Show("Térkép nincs betöltve! :D\nNem végeztél keresést!", "Próbáld újra!",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 tF.Close();
+                tF = new TerkepForm();
             }
             else if (Eredm.Count == 0)
             {
@@ -122,33 +123,39 @@ namespace Irszkez
                 if (result == DialogResult.Retry)
                 {
                     tF.Close();
+                    tF = new TerkepForm();
                 }
             }
 
             else
             {
+                tF = new TerkepForm();
+                sw.Start();
                 tF.Show();
+                
                 tF.Pb_Terkep_Betoltes.Maximum = Eredm.Count;
                 tF.Pb_Terkep_Betoltes.Minimum = 0;
-                sw.Start();
+
                 int jElozo = 0, holTart = 0;
                 bool tempBool = false;
                 string temp = null;
                 string tempVaros = null;
                 double j = 0, i =0, maxSzam = Eredm.Count;
+
                 tF.Terkep_Beallitas();
+
                 foreach (Irszam item in Eredm)
                 {
                     temp = item.Irsz + ", Hungary";
                     tempVaros = item.Varos;
-                    tF.Terkep_Megnyitasa(temp, tempVaros);
+                    tF.Terkep_MegnyitasaIranyitoszam(temp, tempVaros);
                     temp = null;
                     tempVaros = null;
 
                     tF.Pb_Terkep_Betoltes.Value = holTart;
                     holTart++;
                     i++;
-                    j = (i/maxSzam)*100;
+                    j = (i/maxSzam);
 
                     tempBool = int.TryParse(
                         tF.Text.Substring(
@@ -160,11 +167,13 @@ namespace Irszkez
 
                     if (j != jElozo)
                     {
-                        tF.Text ="Terkép   Load: " + j + "%";
+                        tF.Text =(string.Format("Terkép   Load: {0}", j.ToString("P3")));
                     }
                 }
                 sw.Stop();
+
                 tF.Terkep_Beallitas();
+
                 RajzolUzenet(sw, tF);
                 tF.Text = "Térkép";
             }

@@ -56,16 +56,16 @@
             this.gmap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.gmap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.gmap.ShowTileGridLines = false;
-            this.gmap.Size = new System.Drawing.Size(742, 589);
+            this.gmap.Size = new System.Drawing.Size(742, 586);
             this.gmap.TabIndex = 0;
             this.gmap.Zoom = 7D;
             // 
             // Pb_Terkep_Betoltes
             // 
             this.Pb_Terkep_Betoltes.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.Pb_Terkep_Betoltes.Location = new System.Drawing.Point(12, 542);
+            this.Pb_Terkep_Betoltes.Location = new System.Drawing.Point(12, 526);
             this.Pb_Terkep_Betoltes.Name = "Pb_Terkep_Betoltes";
-            this.Pb_Terkep_Betoltes.Size = new System.Drawing.Size(715, 30);
+            this.Pb_Terkep_Betoltes.Size = new System.Drawing.Size(715, 33);
             this.Pb_Terkep_Betoltes.TabIndex = 1;
             // 
             // TerkepForm
