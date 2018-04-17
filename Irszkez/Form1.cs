@@ -25,6 +25,10 @@ namespace Irszkez
 
         internal List<Irszam> Eredm { get => eredm; set => eredm = value; }
 
+        TerkepForm tF = new TerkepForm();
+
+        Stopwatch sw = new Stopwatch();
+        
         public Form1()
         {
             InitializeComponent();
@@ -82,27 +86,28 @@ namespace Irszkez
             {
                 lbEredmeny.Items.Add(item);
             }
+            label1.Visible = true;
             label1.Text = Eredm.Count().ToString();
             if (Eredm.Count() == 0)
             {
                 MessageBox.Show("Nincs találat!");
             }
-
         }
 
         private void Btn_OpenMap_Click(object sender, EventArgs e)
         {
-            TerkepForm tF = new TerkepForm();
-            tF.Show();
+
 
             if (Eredm == null)
             {
+                tF.Show();
                 MessageBox.Show("Térkép nincs betöltve! :D\nNem végeztél keresést!", "Próbáld újra!",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 tF.Close();
             }
             else if (Eredm.Count == 0)
             {
+                tF.Show();
                 tF.Terkep_Megnyitasa("Hungary", "Magyarország");
                 DialogResult result = MessageBox.Show(
                                             "Térkép betöltve!\nÖsszesen " +
@@ -122,47 +127,66 @@ namespace Irszkez
 
             else
             {
-                Stopwatch sw = new Stopwatch();
+                tF.Show();
+                tF.Pb_Terkep_Betoltes.Maximum = Eredm.Count;
+                tF.Pb_Terkep_Betoltes.Minimum = 0;
                 sw.Start();
-                tF.Iranyitoszamokdb = Eredm.Count;
-                Rajzol(tF);
+                int jElozo = 0, holTart = 0;
+                bool tempBool = false;
+                string temp = null;
+                string tempVaros = null;
+                double j = 0, i =0, maxSzam = Eredm.Count;
+                tF.Terkep_Beallitas();
+                foreach (Irszam item in Eredm)
+                {
+                    temp = item.Irsz + ", Hungary";
+                    tempVaros = item.Varos;
+                    tF.Terkep_Megnyitasa(temp, tempVaros);
+                    temp = null;
+                    tempVaros = null;
+
+                    tF.Pb_Terkep_Betoltes.Value = holTart;
+                    holTart++;
+                    i++;
+                    j = (i/maxSzam)*100;
+
+                    tempBool = int.TryParse(
+                        tF.Text.Substring(
+                            0, tF.Text.Count(
+                                x => Char.IsDigit(x)
+                            )), out jElozo);
+                    System.Threading.Thread.Sleep(10);
+                    tF.Text = "Terkép   Load: " + j + "%";
+
+                    if (j != jElozo)
+                    {
+                        tF.Text ="Terkép   Load: " + j + "%";
+                    }
+                }
                 sw.Stop();
-                RajzolUzenet(sw);
+                tF.Terkep_Beallitas();
+                RajzolUzenet(sw, tF);
+                tF.Text = "Térkép";
             }
         }
 
-        public void Rajzol(TerkepForm tF)
-        {
-            //TerkepForm tF = new TerkepForm();
-            string temp = null;
-            string tempVaros = null;
-            foreach (Irszam item in Eredm)
-            {
-                temp = item.Irsz + ", Hungary";
-                tempVaros = item.Varos;
-                tF.Terkep_Megnyitasa(temp, tempVaros);
-                temp = null;
-                tempVaros = null;
-            }
-            
-        }
-
-        public void RajzolUzenet (Stopwatch sw)
+        public void RajzolUzenet(Stopwatch sw, TerkepForm form)
         {
             TimeSpan ts = sw.Elapsed;
             MessageBox.Show(
-                "Térkép betöltve! :D\nÖsszesen " +
-                Eredm.Count.ToString() +
-                " város lett megjelölve!" +
-                "\n\nIdőtartam: " + 
-                String.Format("{0}:{1}",
-                    Math.Floor(ts.TotalMinutes),
-                    ts.ToString("ss\\.ff")),
-                "Értesítés",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information,
-                MessageBoxDefaultButton.Button1
+                        "Térkép betöltve! :D\nÖsszesen " +
+                        Eredm.Count.ToString() +
+                        " város lett megjelölve!" +
+                        "\n\nIdőtartam: " +
+                        String.Format("{0}:{1}",
+                                Math.Floor(ts.TotalMinutes),
+                                ts.ToString("ss\\.fff")),
+                        "Értesítés",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information,
+                        MessageBoxDefaultButton.Button1
                 );
+            form.Pb_Terkep_Betoltes.Visible = false;
         }
     }
 }
